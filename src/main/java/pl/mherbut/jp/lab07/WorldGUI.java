@@ -335,6 +335,8 @@
 //}
 package pl.mherbut.jp.lab07;
 
+import pl.edu.pwr.tkubik.jp.farm.api.Role;
+
 import javax.swing.*;
 import java.awt.*;
 import java.rmi.RemoteException;
@@ -400,7 +402,7 @@ public class WorldGUI extends JFrame {
                 plantPanels[i][j].removeAll();
 
                 if (world.map[i][j].hasMachine()) {
-                    if (Objects.equals(world.map[i][j].getMachine().getRole(), "Seeder"))
+                    if (world.map[i][j].getMachine().getRole() == Role.SEEDER)
                         machineLabels[i][j].setIcon(seederIcon);
                     else
                         machineLabels[i][j].setIcon(harvesterIcon);

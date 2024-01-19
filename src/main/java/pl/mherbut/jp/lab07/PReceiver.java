@@ -2,9 +2,6 @@ package pl.mherbut.jp.lab07;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 public class PReceiver extends JPanel {
 

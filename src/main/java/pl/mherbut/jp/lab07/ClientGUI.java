@@ -1,5 +1,7 @@
 package pl.mherbut.jp.lab07;
 
+import pl.edu.pwr.tkubik.jp.farm.api.Role;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -14,9 +16,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ClientGUI extends JFrame {
-    public String serverPort = "2000";
-    public String serverHost = "localhost";
-    private Client client;
     private final JButton registerButton;
     private final JButton unregisterButton;
     private final JButton moveButton;
@@ -26,6 +25,9 @@ public class ClientGUI extends JFrame {
     private final PReceiver receiver;
     private final JTextField serverHostField;
     private final JTextField serverPortField;
+    public String serverPort = "2000";
+    public String serverHost = "localhost";
+    private Client client;
 
     public ClientGUI() {
         super("Symulator Farmy 2024");
@@ -39,9 +41,9 @@ public class ClientGUI extends JFrame {
         serverHostField = new JTextField(serverHost);
         serverPortField = new JTextField(serverPort);
 
-        String[] roles = {"Seeder", "Harvester"};
+        String[] roles = {"SEEDER", "HARVESTER"};
         roleComboBox = new JComboBox<>(roles);
-        roleComboBox.setSelectedItem("Seeder");
+        roleComboBox.setSelectedItem("SEEDER");
 
         registerButton = new JButton("Zarejestruj się");
         unregisterButton = new JButton("Wyrejestruj się");
@@ -114,7 +116,8 @@ public class ClientGUI extends JFrame {
                 try {
                     serverHost = serverHostField.getText();
                     serverPort = serverPortField.getText();
-                    String role = (String) roleComboBox.getSelectedItem();
+                    Role role = Role.valueOf((String) roleComboBox.getSelectedItem());
+                    System.out.println((String) roleComboBox.getSelectedItem() + role);
 
 //                    myHost = receiver.getHost();
 //                    myPort = receiver.getPort();
@@ -124,10 +127,9 @@ public class ClientGUI extends JFrame {
 //                    client.register(myHost, myPort, role);
 
 
-
                 } catch (IOException ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Błąd połączenia. Spróbuj zamienić PORT");
+                    JOptionPane.showMessageDialog(null, "Błąd połączenia. Spróbuj zmienić host lub PORT serwera!");
                 } catch (NotBoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -142,19 +144,20 @@ public class ClientGUI extends JFrame {
                 client.seed();
                 break;
             case "harvest":
-                String inputData = JOptionPane.showInputDialog("Enter data (comma-separated indices):");
-                List<Integer> data = Arrays.stream(inputData.split(",")).map(Integer::parseInt).collect(Collectors.toList());
-                client.harvest(data);
-//                } catch (IOException ex) {
-//                    ex.printStackTrace();
-//                    JOptionPane.showMessageDialog(null, "Error harvesting.");
-//                }
+                try {
+                    String inputData = JOptionPane.showInputDialog("Enter data (comma-separated indices):");
+                    List<Integer> data = Arrays.stream(inputData.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+                    client.harvest(data);
+                } catch (NumberFormatException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Nie poprawne dane!");
+                }
                 break;
         }
     }
 
     void setButtonsEnabled(boolean enabled) {
-        boolean isSeeder = Objects.equals(roleComboBox.getSelectedItem(), "Seeder");
+        boolean isSeeder = Objects.equals(roleComboBox.getSelectedItem(), "SEEDER");
         registerButton.setVisible(!enabled);
         unregisterButton.setVisible(enabled);
         moveButton.setVisible(enabled);

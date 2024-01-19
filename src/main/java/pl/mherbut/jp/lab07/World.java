@@ -1,5 +1,10 @@
 package pl.mherbut.jp.lab07;
 
+import pl.edu.pwr.tkubik.jp.farm.api.*;
+import pl.edu.pwr.tkubik.jp.farm.api.Action;
+import pl.mherbut.jp.lab07.models.Field;
+import pl.mherbut.jp.lab07.models.Machine;
+
 import javax.swing.*;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -35,10 +40,10 @@ class World extends UnicastRemoteObject implements IWorld, Serializable {
     }
 
     @Override
-    public synchronized int register(ICallback ic, String role) {
+    public synchronized int register(ICallback ic, Role role) {
         int id;
         try {
-            if (Objects.equals(role, "Seeder"))
+            if (role == Role.SEEDER)
                 if (seederCounter + 1 > worldSize)
                     throw new Exception("Brak miejsca");
                 else
@@ -66,8 +71,8 @@ class World extends UnicastRemoteObject implements IWorld, Serializable {
     @Override
     public synchronized boolean unregister(int id) {
         int index = id - 1;
-        String role = machines[index].getRole();
-        if (Objects.equals(role, "Seeder"))
+        Role role = machines[index].getRole();
+        if (role == Role.SEEDER)
             seederCounter--;
         else
             harvesterCounter--;
@@ -90,9 +95,9 @@ class World extends UnicastRemoteObject implements IWorld, Serializable {
         int newRow = row;
         int newCol = col;
         int direction = machine.getDirection();
-        String role = machine.getRole();
+        Role role = machine.getRole();
 
-        if (Objects.equals(role, "Seeder")) {
+        if (role == Role.SEEDER) {
             if (col + direction > 4 || col + direction < 0) {
                 machine.changeDirection();
                 direction = machine.getDirection();

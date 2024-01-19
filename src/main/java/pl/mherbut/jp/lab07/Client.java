@@ -1,5 +1,10 @@
 package pl.mherbut.jp.lab07;
 
+import pl.edu.pwr.tkubik.jp.farm.api.Action;
+import pl.edu.pwr.tkubik.jp.farm.api.ICallback;
+import pl.edu.pwr.tkubik.jp.farm.api.IWorld;
+import pl.edu.pwr.tkubik.jp.farm.api.Role;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.NotBoundException;
@@ -12,11 +17,11 @@ import java.util.List;
 public class Client extends UnicastRemoteObject implements ICallback, Serializable {
 
     private final IWorld iw;
-    private final String role;
-    private int id;
+    private final Role role;
     private final ClientGUI gui;
+    private int id;
 
-    public Client(ClientGUI gui, String role, String serverHost, String serverPort) throws NotBoundException, RemoteException {
+    public Client(ClientGUI gui, Role role, String serverHost, String serverPort) throws NotBoundException, RemoteException {
 //    public Client(ClientGUI gui, String role, String severHost, String serverPort) throws NotBoundException, RemoteException {
         Registry r2 = LocateRegistry.getRegistry(serverHost, Integer.parseInt(serverPort));
         iw = (IWorld) r2.lookup("World");
@@ -27,7 +32,7 @@ public class Client extends UnicastRemoteObject implements ICallback, Serializab
 
     public void register() throws IOException {
         id = iw.register(this, role);
-        if (id != 0){
+        if (id != 0) {
             gui.setButtonsEnabled(true);
             gui.showResponse("Dostełem id:" + id);
         } else

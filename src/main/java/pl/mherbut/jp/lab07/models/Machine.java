@@ -1,14 +1,17 @@
-package pl.mherbut.jp.lab07;
+package pl.mherbut.jp.lab07.models;
+
+import pl.edu.pwr.tkubik.jp.farm.api.ICallback;
+import pl.edu.pwr.tkubik.jp.farm.api.Role;
 
 public class Machine {
     private final int id;
+    private final ICallback ic;
+    private final Role role;
     private int row;
     private int col;
-    private ICallback ic;
-    private final String role;
-    private int direction=1;
+    private int direction = 1;
 
-    public Machine(int id, int row, int col, ICallback ic, String role) {
+    public Machine(int id, int row, int col, ICallback ic, Role role) {
         this.id = id;
         this.row = row;
         this.col = col;
@@ -36,7 +39,7 @@ public class Machine {
         this.col = col;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 

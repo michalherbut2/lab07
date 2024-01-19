@@ -1,4 +1,4 @@
-package pl.mherbut.jp.lab07;
+package pl.mherbut.jp.lab07.models;
 
 import java.util.ArrayList;
 import java.util.Collections;
